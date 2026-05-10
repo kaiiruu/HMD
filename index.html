@@ -12,13 +12,34 @@
 
     <h1 class="title"></h1>
 
+    <!-- Audio lives here so it starts on the same page as the click -->
+    <audio id="bg-music" loop>
+        <source src="love.mp3" type="audio/mp3">
+    </audio>
+
     <div style="position: absolute; top: 60vh; width: 100%; display: flex; justify-content: center;">
-        <a href="flower.html" class="btn" onclick="sessionStorage.setItem('autoplay', '1')">
-            <img src="images/gift.png" class="text" alt="gift" width="25" height="25">
+        <a class="btn" id="goBtn" style="display: flex; align-items: center; gap: 0.5em; cursor: pointer;">
+            <img src="images/gift.png" class="text" alt="gift" style="width: 1em; height: 1em; object-fit: contain; display: inline-block; vertical-align: middle;">
             <span class="text">Click here</span>
         </a>
     </div>
 
     <script src="js/index.js"></script>
+    <script>
+        document.getElementById('goBtn').addEventListener('click', function () {
+            var audio = document.getElementById('bg-music');
+
+            // Play audio HERE — inside a direct user click, so browser always allows it
+            audio.play().then(function () {
+                // Small delay so audio context is fully started before navigating
+                setTimeout(function () {
+                    window.location.href = 'flower.html';
+                }, 300);
+            }).catch(function () {
+                // If audio fails for any reason, still navigate
+                window.location.href = 'flower.html';
+            });
+        });
+    </script>
 </body>
 </html>
