@@ -322,9 +322,9 @@
   <div id="tap-hint" style="
     display: none;
     position: fixed;
-    bottom: 2.5rem;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     background: rgba(255,255,255,0.08);
     border: 1px solid rgba(255,255,255,0.25);
     border-radius: 3rem;
@@ -338,16 +338,20 @@
     -webkit-backdrop-filter: blur(6px);
     z-index: 9999;
     white-space: nowrap;
-    animation: hint-pulse 2s ease-in-out infinite;
+    animation: hint-fadein 0.8s ease forwards, hint-pulse 2s ease-in-out 0.8s infinite;
     transition: opacity 0.6s ease;
   ">
     ♪ tap anywhere to play music
   </div>
 
   <style>
+    @keyframes hint-fadein {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+      to   { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    }
     @keyframes hint-pulse {
-      0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
-      50%       { opacity: 1;   transform: translateX(-50%) scale(1.04); }
+      0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.04); }
     }
   </style>
 
@@ -357,8 +361,11 @@
       const hint  = document.getElementById("tap-hint");
 
       function hideHint() {
+        hint.style.animation = "none";
         hint.style.opacity = "0";
-        setTimeout(function () { hint.style.display = "none"; }, 600);
+        hint.style.transform = "translate(-50%, -50%) scale(0.95)";
+        hint.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        setTimeout(function () { hint.style.display = "none"; }, 650);
       }
 
       function enableAudio() {
