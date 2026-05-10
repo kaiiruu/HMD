@@ -319,29 +319,28 @@
   </audio>
 
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const audio = document.getElementById("bg-music");
+    document.addEventListener("DOMContentLoaded", function () {
+      const audio = document.getElementById("bg-music");
 
-    audio.play().catch(err => {
-      console.log("Autoplay blocked:", err);
+      // Play immediately if the user came from the button click
+      if (sessionStorage.getItem('autoplay') === '1') {
+        sessionStorage.removeItem('autoplay'); // clean up so it doesn't re-trigger on refresh
+        audio.play().catch(err => console.log("Autoplay error:", err));
+      }
+
+      // Fallback: also play on any tap/click just in case
+      function enableAudio() {
+        audio.play();
+        document.removeEventListener("click", enableAudio);
+        document.removeEventListener("touchstart", enableAudio);
+      }
+      document.addEventListener("click", enableAudio);
+      document.addEventListener("touchstart", enableAudio);
     });
+  </script>
 
-    function enableAudio() {
-      audio.play();
-      document.removeEventListener("click", enableAudio);
-      document.removeEventListener("touchstart", enableAudio);
-    }
-    document.addEventListener("click", enableAudio);
-    document.addEventListener("touchstart", enableAudio);
-  });
-</script>
+  <!-- Import Javascript -->
+  <script src="js/main.js"></script>
+
 </body>
-
 </html>
-
-<!-- Import Javascript -->
-<script src="js/main.js"></script>
-
-
-
-
