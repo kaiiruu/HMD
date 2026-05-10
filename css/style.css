@@ -12,22 +12,14 @@
 
 .title {
   position: absolute;
+  width: 100%;
+  text-align: center;
+  margin-top: 50px;
   top: 0;
   left: 0;
-  width: 100%;
-  /* fluid vertical centering in the top ~20% of screen, above the flowers */
-  height: clamp(80px, 20vh, 160px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 0 1rem;
-
   color: #C0E5F7;
   font-family: 'Courier New', Courier, monospace;
-  /* fluid font: min 1.2rem -> max ~2.8rem, scales with viewport */
-  font-size: clamp(1.2rem, 4vw + 0.5rem, 2.8rem);
-  letter-spacing: clamp(2px, 1vw, 12px);
+  font-size: 40px;
   text-shadow: 0px 0px 20px #C0E5F7;
 }
 
