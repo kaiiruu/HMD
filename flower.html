@@ -314,7 +314,7 @@
 
   <h1 class="title"><span id="title"></span></h1>
 
-  <audio id="bg-music" loop>
+  <audio id="bg-music" loop autoplay>
     <source src="love.mp3" type="audio/mp3">
   </audio>
 
@@ -322,20 +322,19 @@
     document.addEventListener("DOMContentLoaded", function () {
       const audio = document.getElementById("bg-music");
 
-      // Play immediately if the user came from the button click
-      if (sessionStorage.getItem('autoplay') === '1') {
-        sessionStorage.removeItem('autoplay'); // clean up so it doesn't re-trigger on refresh
-        audio.play().catch(err => console.log("Autoplay error:", err));
-      }
-
-      // Fallback: also play on any tap/click just in case
-      function enableAudio() {
-        audio.play();
-        document.removeEventListener("click", enableAudio);
-        document.removeEventListener("touchstart", enableAudio);
-      }
-      document.addEventListener("click", enableAudio);
-      document.addEventListener("touchstart", enableAudio);
+      // The user clicked the button on index.html, so the browser
+      // already granted audio permission for this origin.
+      // autoplay attribute + play() here will succeed.
+      audio.play().catch(function () {
+        // Last resort fallback: play on first interaction
+        function enableAudio() {
+          audio.play();
+          document.removeEventListener("click", enableAudio);
+          document.removeEventListener("touchstart", enableAudio);
+        }
+        document.addEventListener("click", enableAudio);
+        document.addEventListener("touchstart", enableAudio);
+      });
     });
   </script>
 
