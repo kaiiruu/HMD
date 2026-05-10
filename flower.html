@@ -318,21 +318,61 @@
     <source src="love.mp3" type="audio/mp3">
   </audio>
 
+  <!-- Tap-to-play hint -->
+  <div id="tap-hint" style="
+    display: none;
+    position: fixed;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 3rem;
+    padding: 0.65rem 1.4rem;
+    color: rgba(192, 229, 247, 0.9);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 9999;
+    white-space: nowrap;
+    animation: hint-pulse 2s ease-in-out infinite;
+    transition: opacity 0.6s ease;
+  ">
+    ♪ tap anywhere to play music
+  </div>
+
+  <style>
+    @keyframes hint-pulse {
+      0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+      50%       { opacity: 1;   transform: translateX(-50%) scale(1.04); }
+    }
+  </style>
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const audio = document.getElementById("bg-music");
+      const hint  = document.getElementById("tap-hint");
 
-      // The user clicked the button on index.html, so the browser
-      // already granted audio permission for this origin.
-      // autoplay attribute + play() here will succeed.
-      audio.play().catch(function () {
-        // Last resort fallback: play on first interaction
-        function enableAudio() {
-          audio.play();
-          document.removeEventListener("click", enableAudio);
-          document.removeEventListener("touchstart", enableAudio);
-        }
-        document.addEventListener("click", enableAudio);
+      function hideHint() {
+        hint.style.opacity = "0";
+        setTimeout(function () { hint.style.display = "none"; }, 600);
+      }
+
+      function enableAudio() {
+        audio.play().then(hideHint).catch(function(){});
+        document.removeEventListener("click",      enableAudio);
+        document.removeEventListener("touchstart", enableAudio);
+      }
+
+      audio.play().then(function () {
+        // Autoplay succeeded — no hint needed
+      }).catch(function () {
+        // Autoplay blocked — show the hint
+        hint.style.display = "block";
+        document.addEventListener("click",      enableAudio);
         document.addEventListener("touchstart", enableAudio);
       });
     });
